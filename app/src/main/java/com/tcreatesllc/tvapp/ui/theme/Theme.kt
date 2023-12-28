@@ -17,13 +17,17 @@ fun TvAppTheme(
         darkColorScheme(
             primary = Purple80,
             secondary = PurpleGrey80,
-            tertiary = Pink80
+            tertiary = Pink80,
+            surfaceTint = lamboGold,
+            surfaceVariant = lamboRed
         )
     } else {
         lightColorScheme(
             primary = Purple40,
             secondary = PurpleGrey40,
-            tertiary = Pink40
+            tertiary = Pink40,
+            surfaceTint = lamboGold,
+            surfaceVariant = lamboRed
         )
     }
     MaterialTheme(
