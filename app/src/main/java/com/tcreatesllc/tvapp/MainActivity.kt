@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             TvAppTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
                     shape = RectangleShape
                 ) {
                     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -273,7 +273,9 @@ fun topTab(selectedTabIndexArg: Int, tabs: List<String>) {
                     Text(
                         text = tab,
                         fontFamily = tvvAppFontFamily,
-                        fontWeight = FontWeight.Light,
+                        fontWeight = if (index == selectedTabIndex) { FontWeight.Bold} else {
+                            FontWeight.Light
+                        },
                         fontSize = 12.sp,
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
                         color = if (index == selectedTabIndex) {
