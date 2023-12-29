@@ -14,10 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.tv.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,10 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRestorer
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
@@ -315,59 +314,91 @@ fun wheelCardCaption(caption1: String, caption2: String, caption1Color: Color) {
         Text(
             color = caption1Color,
             text = caption1,
+            fontWeight = FontWeight.Light,
             fontFamily = tvvAppFontFamily,
-            fontSize = 24.sp
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
         )
         Text(
-            color = Color.White,
+            color = Color.LightGray,
             fontFamily = tvvAppFontFamily,
-            text = caption1,
-            fontSize = 12.sp
+            text = caption2,
+            fontWeight = FontWeight.Light,
+            fontSize = 12.sp,
+            textAlign = TextAlign.Center
         )
     }
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun wheelCard(){
+fun wheelCard(drawableInt: Int,
+              caption1: String,
+              caption2: String,
+              caption3: String,
+              caption4: String) {
     Card(
         modifier = Modifier.wrapContentSize(),
         onClick = { },
         colors = CardDefaults.colors(containerColor = Color(0xFF28384F))
     ) {
-        Box(modifier = Modifier.padding(10.dp)) {
-
+        Box(modifier = Modifier.padding(end = 15.dp, start = 25.dp, top = 15.dp, bottom = 10.dp)) {
+            StrokedCircleIcon(mods = Modifier.align(Alignment.TopEnd))
+            wheelCardColumn(
+                drawableInt = drawableInt,
+                caption1 = caption1,
+                caption2 = caption2,
+                caption3 = caption3,
+                caption4 = caption4
+            )
         }
     }
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun wheelCardColumn(){
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center){
+fun wheelCardColumn(
+    drawableInt: Int,
+    caption1: String,
+    caption2: String,
+    caption3: String,
+    caption4: String
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier.padding(end = 10.dp)
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.lamborghini_logo_dup),
+            painter = painterResource(id = drawableInt),
             contentDescription = null,
             modifier = Modifier
                 .wrapContentSize()
                 .align(Alignment.CenterHorizontally)
         )
-        Text(
-            text = "Card",
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+        wheelCardCaption(
+            caption1 = caption1,
+            caption2 = caption2,
+            caption1Color = Color.White
         )
+        wheelCardCaption(
+            caption1 = caption3,
+            caption2 = caption4,
+            caption1Color = MaterialTheme.colorScheme.surfaceTint
+        )
+
     }
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun StrokedCircleIcon(){
-    val stroke = Stroke(width = 1f,
-        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f)
+fun StrokedCircleIcon(mods: Modifier) {
+    val stroke = Stroke(
+        width = 3f,
+        pathEffect = PathEffect.dashPathEffect(floatArrayOf(2.5f, 2.5f), 0f)
     )
     Box(
-        Modifier
+        mods
             .drawBehind {
                 drawCircle(
                     color = Color(0xFFFFEAB8),
@@ -375,7 +406,8 @@ fun StrokedCircleIcon(){
                 )
             }
             .wrapContentSize()
-            .background(color = Color.Transparent),
+            .clip(CircleShape)
+            .background(color = Color.Black),
         contentAlignment = Alignment.Center
     ) {
         Icon(
@@ -383,7 +415,7 @@ fun StrokedCircleIcon(){
             contentDescription = "Localized description",
             tint = MaterialTheme.colorScheme.surfaceTint,
             modifier = Modifier
-                .padding(5.dp)
+                .padding(2.5.dp)
                 .align(Alignment.Center)
         )
     }
@@ -410,7 +442,11 @@ fun ComponentPreview() {
             shape = RectangleShape
         ) {
             //StrokedCircleIcon()
-            wheelCardColumn()
+    wheelCard(drawableInt = R.drawable.wheel_left,
+        caption1 = "POTENZA RE-71R",
+        caption2 = "Ultimate performance",
+        caption3 = "$1251.00",
+        caption4 = "Price varies by size")
         }
     }
 }
