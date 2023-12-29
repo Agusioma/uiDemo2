@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.tv.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -48,7 +47,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.AssistChip
@@ -65,6 +63,7 @@ import androidx.tv.material3.Surface
 import androidx.tv.material3.Tab
 import androidx.tv.material3.TabRow
 import androidx.tv.material3.TabRowDefaults
+import androidx.tv.material3.Text
 import com.tcreatesllc.tvapp.ui.theme.TvAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -99,7 +98,6 @@ class MainActivity : ComponentActivity() {
                             verticalArrangement = Arrangement.Center
                         ) {
                             topRow(selectedTabIndexArg = selectedTabIndex, tabs = tabs)
-                            //progressIndicator()
                             titleAndProgressbars()
                         }
                     }
@@ -746,30 +744,6 @@ fun bottomRow(mods: Modifier) {
             )
             CircleIcon(R.drawable.rounded_arrow_forward_ios_24)
 
-        }
-    }
-}
-
-@OptIn(ExperimentalTvMaterial3Api::class)
-@Preview(showBackground = true)
-@Composable
-fun ComponentPreview() {
-    TvAppTheme {
-        Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            shape = RectangleShape
-        ) {
-            //CircleIcon(R.drawable.rounded_arrow_forward_ios_24)
-            /*wheelCard(
-                drawableInt = R.drawable.wheel_left,
-                caption1 = "POTENZA RE-71R",
-                caption2 = "Ultimate performance",
-                caption3 = "$1251.00",
-                caption4 = "Price varies by size"
-            )*/
-            //centerTitle()
         }
     }
 }
