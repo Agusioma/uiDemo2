@@ -8,11 +8,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -27,19 +29,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRestorer
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.AssistChip
 import androidx.tv.material3.AssistChipDefaults
 import androidx.tv.material3.Border
+import androidx.tv.material3.Card
+import androidx.tv.material3.CardDefaults
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Icon
 import androidx.tv.material3.InputChip
@@ -59,7 +69,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             TvAppTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(MaterialTheme.colorScheme.background),
                     shape = RectangleShape
                 ) {
                     var selectedTabIndex by remember { mutableStateOf(0) }
@@ -84,7 +96,7 @@ val tvvAppFontFamily = FontFamily(
 
 
 @Composable
-fun topRow(selectedTabIndexArg: Int, tabs: List<String>){
+fun topRow(selectedTabIndexArg: Int, tabs: List<String>) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
@@ -94,14 +106,14 @@ fun topRow(selectedTabIndexArg: Int, tabs: List<String>){
             .fillMaxWidth()
     ) {
         topLeftChip()
-        tabsAndLogo(selectedTabIndexArg , tabs)
+        tabsAndLogo(selectedTabIndexArg, tabs)
         topRightChip()
 
     }
 }
 
 @Composable
-fun tabsAndLogo(selectedTabIndexArg: Int, tabs: List<String>){
+fun tabsAndLogo(selectedTabIndexArg: Int, tabs: List<String>) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
@@ -109,7 +121,7 @@ fun tabsAndLogo(selectedTabIndexArg: Int, tabs: List<String>){
             .padding(10.dp)
             .wrapContentSize()
     ) {
-        topTab(selectedTabIndexArg , tabs)
+        topTab(selectedTabIndexArg, tabs)
         Image(
             painter = painterResource(id = R.drawable.lamborghini_logo_dup),
             contentDescription = null,
@@ -273,7 +285,9 @@ fun topTab(selectedTabIndexArg: Int, tabs: List<String>) {
                     Text(
                         text = tab,
                         fontFamily = tvvAppFontFamily,
-                        fontWeight = if (index == selectedTabIndex) { FontWeight.Bold} else {
+                        fontWeight = if (index == selectedTabIndex) {
+                            FontWeight.Bold
+                        } else {
                             FontWeight.Light
                         },
                         fontSize = 12.sp,
@@ -290,8 +304,91 @@ fun topTab(selectedTabIndexArg: Int, tabs: List<String>) {
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun wheelCardCaption(caption1: String, caption2: String, caption1Color: Color) {
+    Column(
+        modifier = Modifier.padding(bottom = 10.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            color = caption1Color,
+            text = caption1,
+            fontFamily = tvvAppFontFamily,
+            fontSize = 24.sp
+        )
+        Text(
+            color = Color.White,
+            fontFamily = tvvAppFontFamily,
+            text = caption1,
+            fontSize = 12.sp
+        )
+    }
+}
 
 @OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun wheelCard(){
+    Card(
+        modifier = Modifier.wrapContentSize(),
+        onClick = { },
+        colors = CardDefaults.colors(containerColor = Color(0xFF28384F))
+    ) {
+        Box(modifier = Modifier.padding(10.dp)) {
+
+        }
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun wheelCardColumn(){
+    Column(horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center){
+        Image(
+            painter = painterResource(id = R.drawable.lamborghini_logo_dup),
+            contentDescription = null,
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = "Card",
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun StrokedCircleIcon(){
+    val stroke = Stroke(width = 1f,
+        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f)
+    )
+    Box(
+        Modifier
+            .drawBehind {
+                drawCircle(
+                    color = Color(0xFFFFEAB8),
+                    style = stroke
+                )
+            }
+            .wrapContentSize()
+            .background(color = Color.Transparent),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.rounded_arrow_forward_ios_24),
+            contentDescription = "Localized description",
+            tint = MaterialTheme.colorScheme.surfaceTint,
+            modifier = Modifier
+                .padding(5.dp)
+                .align(Alignment.Center)
+        )
+    }
+}
+
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Image(
@@ -301,10 +398,19 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun ComponentPreview() {
     TvAppTheme {
-        topRightChip()
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            shape = RectangleShape
+        ) {
+            //StrokedCircleIcon()
+            wheelCardColumn()
+        }
     }
 }
