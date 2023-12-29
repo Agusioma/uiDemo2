@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +14,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -30,11 +33,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.focusRestorer
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -77,8 +84,8 @@ class MainActivity : ComponentActivity() {
                     //  Greeting("Android")
                     val tabs = listOf("HOME", "MODELS", "PIECES", "SERVICE", "TOUR", "CONTACT")
                     //leftTabRow(leftSelectedTabIndex, tabs)
-                    topRow(selectedTabIndexArg = selectedTabIndex, tabs = tabs)
-
+                    //topRow(selectedTabIndexArg = selectedTabIndex, tabs = tabs)
+                    //progressIndicator()
 
                 }
             }
@@ -332,11 +339,13 @@ fun wheelCardCaption(caption1: String, caption2: String, caption1Color: Color) {
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun wheelCard(drawableInt: Int,
-              caption1: String,
-              caption2: String,
-              caption3: String,
-              caption4: String) {
+fun wheelCard(
+    drawableInt: Int,
+    caption1: String,
+    caption2: String,
+    caption3: String,
+    caption4: String
+) {
     Card(
         modifier = Modifier.wrapContentSize(),
         onClick = { },
@@ -421,6 +430,121 @@ fun StrokedCircleIcon(mods: Modifier) {
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun centerTitle(){
+    Column(
+        modifier = Modifier.padding(bottom = 10.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(){
+            Text(
+                color = Color.White,
+                fontFamily = tvvAppFontFamily,
+                text = "SPORT",
+                fontWeight = FontWeight.Bold,
+                fontSize = 65.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                color = Color(0xFFEC3144),
+                fontFamily = tvvAppFontFamily,
+                text = "CAR",
+                fontWeight = FontWeight.Bold,
+                fontSize = 65.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+
+        Text(
+            color = Color.White,
+            fontFamily = tvvAppFontFamily,
+            text = "WITH GRUNGE OVERLAY",
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun progressIndicator(caption1: String,
+                      caption2: String,
+                      caption3: String,
+                      endAngle: Float){
+    Box(
+        modifier = Modifier
+            .wrapContentSize()
+            .background(Color.Transparent)
+            .padding(top = 15.dp, start = 30.dp, end = 30.dp)
+    ) {
+
+        Canvas(modifier = Modifier
+            .width(135.dp).height(135.dp)
+            ) {
+            drawArc(
+                color = Color.LightGray,
+                -225f,
+                270f,
+                topLeft = Offset(x = 35.dp.toPx(), y = 10.dp.toPx()),
+                useCenter = false,
+                size = Size(size.width/2, size.height/2),
+                style = Stroke(4.dp.toPx(), cap = StrokeCap.Round)
+            )
+            drawArc(
+                color = Color(0xFFCE3563),
+                -225f,
+                endAngle,
+                topLeft = Offset(x = 35.dp.toPx(), y = 10.dp.toPx()),
+                useCenter = false,
+                size = Size(size.width/2, size.height/2),
+                style = Stroke(6.dp.toPx(), cap = StrokeCap.Round)
+            )
+        }
+        Column(
+            modifier = Modifier
+                .padding(top = 25.dp, bottom = 10.dp)
+                .align(Alignment.TopCenter),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                color = Color.White,
+                text = caption1,
+                fontWeight = FontWeight.Normal,
+                fontFamily = tvvAppFontFamily,
+                fontSize = 20.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                color = Color.LightGray,
+                fontFamily = tvvAppFontFamily,
+                text = caption2,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                color = Color.LightGray,
+                fontFamily = tvvAppFontFamily,
+                text = caption3,
+                fontWeight = FontWeight.Light,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 5.dp)
+            )
+        }
+    }
+}
+
+
+@Composable
+fun titleAndProgressbars(){
+
+}
+
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Image(
@@ -442,11 +566,18 @@ fun ComponentPreview() {
             shape = RectangleShape
         ) {
             //StrokedCircleIcon()
-    wheelCard(drawableInt = R.drawable.wheel_left,
-        caption1 = "POTENZA RE-71R",
-        caption2 = "Ultimate performance",
-        caption3 = "$1251.00",
-        caption4 = "Price varies by size")
+            /*wheelCard(
+                drawableInt = R.drawable.wheel_left,
+                caption1 = "POTENZA RE-71R",
+                caption2 = "Ultimate performance",
+                caption3 = "$1251.00",
+                caption4 = "Price varies by size"
+            )*/
+            //centerTitle()
+            progressIndicator(caption1 = "300",
+                caption2 = "K/h",
+                caption3 = "Top Speed",
+                endAngle = 185F)
         }
     }
 }
