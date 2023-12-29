@@ -80,9 +80,7 @@ class MainActivity : ComponentActivity() {
                     shape = RectangleShape
                 ) {
                     var selectedTabIndex by remember { mutableStateOf(0) }
-                    //  Greeting("Android")
                     val tabs = listOf("HOME", "MODELS", "PIECES", "SERVICE", "TOUR", "CONTACT")
-                    //leftTabRow(leftSelectedTabIndex, tabs)
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
@@ -461,7 +459,7 @@ fun centerTitle() {
             Text(
                 color = Color.White,
                 fontFamily = tvvAppFontFamily,
-                text = "SPORT",
+                text = "SPORTS",
                 fontWeight = FontWeight.Bold,
                 fontSize = 45.sp,
                 textAlign = TextAlign.Center
