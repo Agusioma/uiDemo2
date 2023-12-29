@@ -20,7 +20,7 @@ fun TvAppTheme(
             tertiary = Pink80,
             surfaceTint = lamboGold,
             surfaceVariant = lamboRed,
-            background = Color.Black
+            background = Color(0xFF050608)
         )
 
     MaterialTheme(

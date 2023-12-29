@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -33,8 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -43,6 +42,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -84,9 +84,25 @@ class MainActivity : ComponentActivity() {
                     //  Greeting("Android")
                     val tabs = listOf("HOME", "MODELS", "PIECES", "SERVICE", "TOUR", "CONTACT")
                     //leftTabRow(leftSelectedTabIndex, tabs)
-                    //topRow(selectedTabIndexArg = selectedTabIndex, tabs = tabs)
-                    //progressIndicator()
-
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .paint(
+                                painter = painterResource(id = R.drawable.lambo),
+                                contentScale = ContentScale.FillBounds
+                            )
+                    ) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            topRow(selectedTabIndexArg = selectedTabIndex, tabs = tabs)
+                            //progressIndicator()
+                            titleAndProgressbars()
+                        }
+                    }
                 }
             }
         }
@@ -101,6 +117,7 @@ val tvvAppFontFamily = FontFamily(
 )
 
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun topRow(selectedTabIndexArg: Int, tabs: List<String>) {
     Row(
@@ -108,7 +125,7 @@ fun topRow(selectedTabIndexArg: Int, tabs: List<String>) {
         horizontalArrangement = Arrangement.Center,
         modifier = Modifier
             .background(Color.Transparent)
-            .padding(10.dp)
+            .padding(10.dp, bottom = 5.dp)
             .fillMaxWidth()
     ) {
         topLeftChip()
@@ -118,6 +135,7 @@ fun topRow(selectedTabIndexArg: Int, tabs: List<String>) {
     }
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
 fun tabsAndLogo(selectedTabIndexArg: Int, tabs: List<String>) {
     Box(
@@ -273,7 +291,9 @@ fun topTab(selectedTabIndexArg: Int, tabs: List<String>) {
             )
         },
         separator = { Spacer(modifier = Modifier.width(12.dp)) },
-        modifier = Modifier.focusRestorer()
+        modifier = Modifier
+            .focusRestorer()
+            .background(Color.Transparent)
     ) {
         tabs.forEachIndexed { index, tab ->
             key(index) {
@@ -344,12 +364,13 @@ fun wheelCard(
     caption1: String,
     caption2: String,
     caption3: String,
-    caption4: String
+    caption4: String,
+    mods: Modifier
 ) {
     Card(
-        modifier = Modifier.wrapContentSize(),
+        modifier = mods.wrapContentSize(),
         onClick = { },
-        colors = CardDefaults.colors(containerColor = Color(0xFF28384F))
+        colors = CardDefaults.colors(containerColor = Color(0xFF45505C))
     ) {
         Box(modifier = Modifier.padding(end = 15.dp, start = 25.dp, top = 15.dp, bottom = 10.dp)) {
             StrokedCircleIcon(mods = Modifier.align(Alignment.TopEnd))
@@ -432,19 +453,19 @@ fun StrokedCircleIcon(mods: Modifier) {
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun centerTitle(){
+fun centerTitle() {
     Column(
         modifier = Modifier.padding(bottom = 10.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(){
+        Row() {
             Text(
                 color = Color.White,
                 fontFamily = tvvAppFontFamily,
                 text = "SPORT",
                 fontWeight = FontWeight.Bold,
-                fontSize = 65.sp,
+                fontSize = 45.sp,
                 textAlign = TextAlign.Center
             )
             Text(
@@ -452,7 +473,7 @@ fun centerTitle(){
                 fontFamily = tvvAppFontFamily,
                 text = "CAR",
                 fontWeight = FontWeight.Bold,
-                fontSize = 65.sp,
+                fontSize = 45.sp,
                 textAlign = TextAlign.Center
             )
         }
@@ -462,7 +483,7 @@ fun centerTitle(){
             fontFamily = tvvAppFontFamily,
             text = "WITH GRUNGE OVERLAY",
             fontWeight = FontWeight.Bold,
-            fontSize = 14.sp,
+            fontSize = 12.sp,
             textAlign = TextAlign.Center
         )
     }
@@ -470,27 +491,31 @@ fun centerTitle(){
 
 @OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun progressIndicator(caption1: String,
-                      caption2: String,
-                      caption3: String,
-                      endAngle: Float){
+fun progressIndicator(
+    caption1: String,
+    caption2: String,
+    caption3: String,
+    endAngle: Float
+) {
     Box(
         modifier = Modifier
             .wrapContentSize()
             .background(Color.Transparent)
-            .padding(top = 15.dp, start = 30.dp, end = 30.dp)
+            .padding(top = 10.dp, start = 5.dp, end = 5.dp)
     ) {
 
-        Canvas(modifier = Modifier
-            .width(135.dp).height(135.dp)
-            ) {
+        Canvas(
+            modifier = Modifier
+                .width(135.dp)
+                .height(135.dp)
+        ) {
             drawArc(
                 color = Color.LightGray,
                 -225f,
                 270f,
                 topLeft = Offset(x = 35.dp.toPx(), y = 10.dp.toPx()),
                 useCenter = false,
-                size = Size(size.width/2, size.height/2),
+                size = Size(size.width / 2, size.height / 2),
                 style = Stroke(4.dp.toPx(), cap = StrokeCap.Round)
             )
             drawArc(
@@ -499,7 +524,7 @@ fun progressIndicator(caption1: String,
                 endAngle,
                 topLeft = Offset(x = 35.dp.toPx(), y = 10.dp.toPx()),
                 useCenter = false,
-                size = Size(size.width/2, size.height/2),
+                size = Size(size.width / 2, size.height / 2),
                 style = Stroke(6.dp.toPx(), cap = StrokeCap.Round)
             )
         }
@@ -541,17 +566,188 @@ fun progressIndicator(caption1: String,
 
 
 @Composable
-fun titleAndProgressbars(){
+fun titleAndProgressbars() {
+    Box(
+        contentAlignment = Alignment.TopCenter,
+        modifier = Modifier
+            .background(Color.Transparent)
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+                bottom = 10.dp,
+                top = 10.dp
+            )
+            .fillMaxSize()
+    ) {
+        /*Image(
+            painter = painterResource(id = R.drawable.lambo),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize().padding(top = 50.dp),
+            contentScale = ContentScale.FillBounds
+        )*/
+        wheelCard(
+            drawableInt = R.drawable.wheel_left,
+            caption1 = "POTENZA RE-71R",
+            caption2 = "Ultimate performance",
+            caption3 = "$1251.00",
+            caption4 = "Price varies by size",
+            mods = Modifier.align(Alignment.TopStart)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Color.Transparent)
+                .align(Alignment.TopCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            centerTitle()
+            Row() {
+                progressIndicator(
+                    caption1 = "300",
+                    caption2 = "K/h",
+                    caption3 = "Top Speed",
+                    endAngle = 185F
+                )
+                progressIndicator(
+                    caption1 = "90",
+                    caption2 = "°C",
+                    caption3 = "Engine Temp",
+                    endAngle = 100F
+                )
+                progressIndicator(
+                    caption1 = "68",
+                    caption2 = "HP",
+                    caption3 = "Car Power",
+                    endAngle = 110F
+                )
+            }
+        }
+        wheelCard(
+            drawableInt = R.drawable.wheel_right,
+            caption1 = "DROPSTARS-645MB",
+            caption2 = "Sizes: 17\" to 20\"",
+            caption3 = "$281.58",
+            caption4 = "Price varies by size",
+            mods = Modifier.align(Alignment.TopEnd)
+        )
+        bottomRow(mods = Modifier.align(Alignment.BottomCenter))
+    }
+
 
 }
 
+@OptIn(ExperimentalTvMaterial3Api::class)
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Image(
-        painter = painterResource(id = R.drawable.lambo),
-        contentDescription = null,
-        modifier = Modifier.fillMaxSize()
+fun CircleIcon(drawableInt: Int) {
+    val stroke = Stroke(
+        width = 3f,
+        //pathEffect = PathEffect.dashPathEffect(floatArrayOf(2.5f, 2.5f), 0f)
     )
+    Box(
+        modifier = Modifier
+            .drawBehind {
+                drawCircle(
+                    color = Color(0xFFCE3563),
+                    style = stroke
+                )
+            }
+            .wrapContentSize()
+            .background(color = Color.Transparent),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            painter = painterResource(id = drawableInt),
+            contentDescription = "Localized description",
+            tint = MaterialTheme.colorScheme.surfaceTint,
+            modifier = Modifier
+                .padding(13.dp)
+                .align(Alignment.Center)
+        )
+    }
+}
+
+@OptIn(ExperimentalTvMaterial3Api::class)
+@Composable
+fun bottomRow(mods: Modifier) {
+    Box(
+        modifier = mods
+            .fillMaxWidth()
+            .background(color = Color.Transparent),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.align(Alignment.CenterStart)
+        ) {
+            CircleIcon(R.drawable.round_arrow_back_ios_24)
+            Text(
+                color = Color.White,
+                fontFamily = tvvAppFontFamily,
+                text = "PREVIOUS CAR",
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 20.dp)
+            )
+
+        }
+
+        AssistChip(
+            onClick = {},
+            border = AssistChipDefaults.border(
+                border = Border(
+                    border = BorderStroke(
+                        1.dp,
+                        MaterialTheme.colorScheme.surfaceVariant
+                    )
+                )
+            ),
+            colors = AssistChipDefaults.colors(containerColor = Color.Transparent),
+            shape = AssistChipDefaults.shape(shape = RoundedCornerShape(45)),
+            modifier = Modifier
+                .wrapContentSize()
+                .align(Alignment.Center)
+        ) {
+            Box(
+
+                modifier = Modifier
+                    .background(Color.Transparent)
+                    .padding(start = 10.dp, end = 10.dp, top = 2.dp, bottom = 2.dp)
+                    .wrapContentWidth()
+            ) {
+
+                Text(
+                    fontFamily = tvvAppFontFamily,
+                    fontWeight = FontWeight.Bold,
+                    text = "TOUR THE CAR",
+                    fontSize = 12.sp,
+                    //color = Color.White,
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
+
+
+            }
+        }
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.align(Alignment.CenterEnd)
+        ) {
+
+            Text(
+                color = Color.White,
+                fontFamily = tvvAppFontFamily,
+                text = "NEXT CAR",
+                fontWeight = FontWeight.Bold,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(end = 20.dp)
+            )
+            CircleIcon(R.drawable.rounded_arrow_forward_ios_24)
+
+        }
+    }
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class)
@@ -565,7 +761,7 @@ fun ComponentPreview() {
                 .background(MaterialTheme.colorScheme.background),
             shape = RectangleShape
         ) {
-            //StrokedCircleIcon()
+            //CircleIcon(R.drawable.rounded_arrow_forward_ios_24)
             /*wheelCard(
                 drawableInt = R.drawable.wheel_left,
                 caption1 = "POTENZA RE-71R",
@@ -574,10 +770,6 @@ fun ComponentPreview() {
                 caption4 = "Price varies by size"
             )*/
             //centerTitle()
-            progressIndicator(caption1 = "300",
-                caption2 = "K/h",
-                caption3 = "Top Speed",
-                endAngle = 185F)
         }
     }
 }
